@@ -17,6 +17,8 @@ imageio-ffmpeg = "^0.4.7"
 Gymnasium = {extras = ["classic_control"], version = "^0.26.3"}
 ipython = "^8.6.0"
 ipykernel = "^6.17.0"
+moviepy = "^1.0.3"
+box2d-py = "^2.3.8"
 
 
 [build-system]
