@@ -19,6 +19,8 @@ ipython = "^8.6.0"
 ipykernel = "^6.17.0"
 moviepy = "^1.0.3"
 box2d-py = "^2.3.8"
+line-profiler = "^3.5.1"
+joblib = "^1.2.0"
 
 
 [build-system]
