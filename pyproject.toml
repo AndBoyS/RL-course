@@ -21,6 +21,7 @@ moviepy = "^1.0.3"
 box2d-py = "^2.3.8"
 line-profiler = "^3.5.1"
 joblib = "^1.2.0"
+graphviz = "^0.20.1"
 
 
 [build-system]

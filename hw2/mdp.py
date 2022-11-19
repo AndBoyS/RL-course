@@ -356,12 +356,12 @@ def get_optimal_action_for_plot(mdp, state_values, state, gamma=0.9):
         return None
     next_actions = mdp.get_possible_actions(state)
     try:
-        from mdp_get_action_value import get_action_value
-    except ImportError:
+        q_values = [get_action_value(mdp, state_values, state, action, gamma) for
+                    action in next_actions]
+    except NameError:
         raise ImportError(
-            "Implement get_action_value(mdp, state_values, state, action, gamma) in the file \"mdp_get_action_value.py\".")
-    q_values = [get_action_value(mdp, state_values, state, action, gamma) for
-                action in next_actions]
+            "Implement get_action_value(mdp, state_values, state, action, gamma)")
+
     optimal_action = next_actions[np.argmax(q_values)]
     return optimal_action
 
@@ -386,3 +386,47 @@ def plot_graph_optimal_strategy_and_state_values(mdp, state_values, gamma=0.9):
                 graph.edge(state_node, state_node + "-" + action,
                            **opt_s_a_edge_attrs)
     return graph
+
+
+def get_action_value(mdp: MDP,
+                     state_values: dict,
+                     state: str,
+                     action: str,
+                     gamma: float):
+    """ Computes Q(s,a) """
+
+    res = 0
+
+    for state_, v_ in state_values.items():
+        prob = mdp.get_transition_prob(state, action, state_)
+        reward = mdp.get_reward(state, action, state_) + gamma * v_
+        res += prob * reward
+
+    return res
+
+
+def get_new_state_value(mdp: MDP,
+                        state_values: dict,
+                        state: str,
+                        gamma: float):
+    """ Computes next V(s). Please do not change state_values in process. """
+    if mdp.is_terminal(state):
+        return 0
+
+    return max(get_action_value(mdp, state_values, state, action, gamma)
+               for action in mdp.get_possible_actions(state))
+
+
+def get_optimal_action(mdp: MDP,
+                       state_values: dict,
+                       state: str,
+                       gamma: float = 0.9):
+    """ Finds optimal action """
+    if mdp.is_terminal(state):
+        return None
+
+    possible_actions = mdp.get_possible_actions(state)
+
+    opt_action_i = np.argmax([get_action_value(mdp, state_values, state, action, gamma)
+                              for action in possible_actions])
+    return possible_actions[opt_action_i]
